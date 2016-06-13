@@ -32,27 +32,27 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 			this.value = value;
 		}
 		
-		@Override
+		
 		public K getKey() {
 			return key;
 		}
-		@Override
+		
 		public V getValue() {
 			return value;
 		}
-		@Override
+		
 		public V setValue(V newValue) {
 			value = newValue;
 			return value;
 		}
 	}
 		
-	@Override
+	
 	public void clear() {
 		entries.clear();
 	}
 
-	@Override
+	
 	public boolean containsKey(Object target) {
 		return findEntry(target) != null;
 	}
@@ -63,7 +63,10 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 	 * @param target
 	 */
 	private Entry findEntry(Object target) {
-        // TODO: fill this in
+		for (Entry entry: entries)
+        	if(equals(target, entry.getKey())) {
+        		return entry;
+        	}
 		return null;
 	}
 
@@ -81,7 +84,7 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 		return target.equals(obj);
 	}
 
-	@Override
+	
 	public boolean containsValue(Object target) {
 		for (Map.Entry<K, V> entry: entries) {
 			if (equals(target, entry.getValue())) {
@@ -91,23 +94,25 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 		return false;
 	}
 
-	@Override
+	
 	public Set<Map.Entry<K, V>> entrySet() {
 		throw new UnsupportedOperationException();
 	}
 
-	@Override
+	
 	public V get(Object key) {
-        // TODO: fill this in.
-		return null;
+        Entry entry = findEntry(key);
+        if (entry == null)
+        	return null;
+        return entry.getValue();
 	}
 
-	@Override
+	
 	public boolean isEmpty() {
 		return entries.isEmpty();
 	}
 
-	@Override
+	
 	public Set<K> keySet() {
 		Set<K> set = new HashSet<K>();
 		for (Entry entry: entries) {
@@ -116,31 +121,41 @@ public class MyLinearMap<K, V> implements Map<K, V> {
 		return set;
 	}
 
-	@Override
+	
 	public V put(K key, V value) {
-        // TODO: fill this in.
-        return null;
+        Entry entry = findEntry(key);
+        if (entry == null) {
+        	entries.add(new Entry(key,value));
+        	return null;
+        }
+    	V oldValue = entry.getValue();
+    	entry.setValue(value);
+    	return oldValue;
 	}
 
-	@Override
+	
 	public void putAll(Map<? extends K, ? extends V> map) {
 		for (Map.Entry<? extends K, ? extends V> entry: map.entrySet()) {
 			put(entry.getKey(), entry.getValue());
 		}
 	}
 
-	@Override
+	
 	public V remove(Object key) {
-        // TODO: fill this in.
-        return null;
+        Entry entry = findEntry(key);
+        if (entry == null)
+        	return null;
+    	V oldValue = entry.getValue();
+    	entries.remove(entry);
+    	return oldValue;
 	}
 
-	@Override
+	
 	public int size() {
 		return entries.size();
 	}
 
-	@Override
+	
 	public Collection<V> values() {
 		Set<V> set = new HashSet<V>();
 		for (Entry entry: entries) {
